@@ -26,9 +26,7 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN 0 */
-
 /* TIM2 generates a 1 ms interrupt for 4-digit display multiplexing. */
-
 /* USER CODE END 0 */
 
 int main(void)
@@ -57,10 +55,6 @@ int main(void)
   }
 }
 
-/**
-  * @brief System Clock Configuration
-  * @retval None
-  */
 void SystemClock_Config(void)
 {
   RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -91,10 +85,6 @@ void SystemClock_Config(void)
   }
 }
 
-/**
-  * @brief TIM2 Initialization Function
-  * @retval None
-  */
 static void MX_TIM2_Init(void)
 {
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
@@ -119,10 +109,6 @@ static void MX_TIM2_Init(void)
   }
 }
 
-/**
-  * @brief GPIO Initialization Function
-  * @retval None
-  */
 static void MX_GPIO_Init(void)
 {
   GPIO_InitTypeDef GPIO_InitStruct = {0};
@@ -133,11 +119,11 @@ static void MX_GPIO_Init(void)
 
   /* All output pins start inactive. */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8 | GPIO_PIN_11 | GPIO_PIN_12,
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8 | GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_15,
                     GPIO_PIN_RESET);
-  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 |
-                           GPIO_PIN_7 | GPIO_PIN_10 | GPIO_PIN_11 |
-                           GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14,
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+                           GPIO_PIN_5 | GPIO_PIN_10 | GPIO_PIN_11 |
+                           GPIO_PIN_12 | GPIO_PIN_14,
                     GPIO_PIN_RESET);
 
   /* PA4..PA7: proximity and limit switch inputs. */
@@ -146,17 +132,17 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* PA8, PA11, PA12: 7-segment digit enables SEG1..SEG3. */
-  GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_11 | GPIO_PIN_12;
+  /* PA8, PA11, PA12, PA15: 7-segment digit enables SEG1..SEG4. */
+  GPIO_InitStruct.Pin = GPIO_PIN_8 | GPIO_PIN_11 | GPIO_PIN_12 | GPIO_PIN_15;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /* PB0, PB1, PB3, PB7, PB10..PB14: 7-segment outputs. */
-  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_3 |
-                        GPIO_PIN_7 | GPIO_PIN_10 | GPIO_PIN_11 |
-                        GPIO_PIN_12 | GPIO_PIN_13 | GPIO_PIN_14;
+  /* PB0, PB1, PB2, PB5, PB10, PB11, PB12, PB14: 7-segment outputs. */
+  GPIO_InitStruct.Pin = GPIO_PIN_0 | GPIO_PIN_1 | GPIO_PIN_2 |
+                        GPIO_PIN_5 | GPIO_PIN_10 | GPIO_PIN_11 |
+                        GPIO_PIN_12 | GPIO_PIN_14;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
@@ -172,10 +158,6 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-/**
-  * @brief TIM2 period elapsed callback.
-  * @note TIM2 is configured for a 1 ms update event.
-  */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM2)
