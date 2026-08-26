@@ -8,7 +8,6 @@
 
 static volatile uint16_t display_value = 0U;
 static uint8_t current_digit = 0U;
-static uint16_t second_counter_ms = 0U;
 
 static const uint8_t digit_segments[10] =
 {
@@ -62,25 +61,28 @@ void SevenSeg_Init(void)
     SevenSeg_WriteSegments(0U);
     display_value = 0U;
     current_digit = 0U;
-    second_counter_ms = 0U;
 }
 
 void SevenSeg_SetNumber(uint16_t value)
 {
     if (value > 9999U)
     {
-        value = 9999U;
+        value = 0U;
     }
 
     display_value = value;
 }
 
+/*
+ * Multiplex refresh. MUST be called continuously, every 1 ms.
+ * This function does not wait for one second and does not use HAL_Delay().
+ */
 void SevenSeg_Tick(void)
 {
     uint16_t value = display_value;
     uint8_t digit_value;
 
-    /* 1 ms tick: multiplex one digit. */
+    /* Blank all digits before changing the segment pattern. */
     SevenSeg_AllDigitsOff();
 
     switch (current_digit)
@@ -99,20 +101,20 @@ void SevenSeg_Tick(void)
     {
         current_digit = 0U;
     }
+}
 
-    /* Display elapsed seconds from 0000 to 9999, then roll over. */
-    second_counter_ms++;
-    if (second_counter_ms >= 1000U)
+/*
+ * Seconds update. Call exactly once every 1000 ms.
+ * Display refresh continues independently through SevenSeg_Tick().
+ */
+void SevenSeg_SecondTick(void)
+{
+    if (display_value >= 9999U)
     {
-        second_counter_ms = 0U;
-
-        if (display_value >= 9999U)
-        {
-            display_value = 0U;
-        }
-        else
-        {
-            display_value++;
-        }
+        display_value = 0U;
+    }
+    else
+    {
+        display_value++;
     }
 }
