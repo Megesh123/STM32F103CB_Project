@@ -26,7 +26,8 @@ static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 
 /* USER CODE BEGIN 0 */
-/* TIM2 generates a 1 ms interrupt for 4-digit display multiplexing. */
+/* TIM2 generates a 1 ms interrupt for continuous 7-segment multiplexing. */
+static uint16_t display_ms = 0U;
 /* USER CODE END 0 */
 
 int main(void)
@@ -162,7 +163,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
   if (htim->Instance == TIM2)
   {
+    /* Refresh one 7-segment digit every 1 ms. */
     SevenSeg_Tick();
+
+    /* Update the displayed seconds exactly once every 1000 ms. */
+    display_ms++;
+    if (display_ms >= 1000U)
+    {
+      display_ms = 0U;
+      SevenSeg_SecondTick();
+    }
   }
 }
 
