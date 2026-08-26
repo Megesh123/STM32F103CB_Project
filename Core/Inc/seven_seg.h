@@ -4,14 +4,14 @@
 #include <stdint.h>
 
 /*
- * 4-digit 7-segment display
+ * 4-digit 7-segment display mapping from the supplied schematic:
  *
  * Segment pins:
- *   A = PB11, B = PB10, C = PB7, D = PB12
- *   E = PB13, F = PB1, G = PB0, DP = PB14
+ *   A = PB10, B = PB2, C = PB5, D = PB12
+ *   E = PB11, F = PB1, G = PB0, DP = PB14
  *
  * Digit enable pins:
- *   SEG1 = PA8, SEG2 = PA11, SEG3 = PA12, SEG4 = PB3
+ *   SEG1 = PA8, SEG2 = PA11, SEG3 = PA12, SEG4 = PA15
  *
  * This implementation assumes a common-cathode display:
  *   segment HIGH = ON, digit enable HIGH = ON.
