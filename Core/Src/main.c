@@ -10,8 +10,8 @@
   * All rights reserved.
   *
   * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component. If no LICENSE file
-  * comes with this software, it is provided AS-IS.
+  * in this software component. If no LICENSE file comes with this software,
+  * it is provided AS-IS.
   *
   ******************************************************************************
   */
@@ -92,13 +92,16 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-    /* Buzzer ON */
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET);
-    HAL_Delay(1000);
-
-    /* Buzzer OFF */
-    HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
-    HAL_Delay(1000);
+    /* Proximity detected (PA4 HIGH) -> Buzzer ON */
+    if (HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4) == GPIO_PIN_SET)
+    {
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_SET);
+    }
+    else
+    {
+      /* No proximity detected -> Buzzer OFF */
+      HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
+    }
   }
   /* USER CODE END WHILE */
 }
@@ -149,12 +152,19 @@ static void MX_GPIO_Init(void)
   GPIO_InitTypeDef GPIO_InitStruct = {0};
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOA_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
 
-  /*Configure GPIO pin Output Level */
+  /* Configure GPIO pin Output Level: PD1 buzzer OFF */
   HAL_GPIO_WritePin(GPIOD, GPIO_PIN_1, GPIO_PIN_RESET);
 
-  /*Configure GPIO pin : PD1 */
+  /* Configure GPIO pin : PA4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
+
+  /* Configure GPIO pin : PD1 */
   GPIO_InitStruct.Pin = GPIO_PIN_1;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
