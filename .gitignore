@@ -1,0 +1,13 @@
+# STM32CubeIDE build output
+Debug/
+Release/
+
+# STM32CubeIDE metadata
+.settings/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.bak
