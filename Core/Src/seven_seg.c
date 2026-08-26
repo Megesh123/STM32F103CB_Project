@@ -1,9 +1,9 @@
 #include "seven_seg.h"
 #include "main.h"
 
-#define SEG_ON   GPIO_PIN_SET
-#define SEG_OFF  GPIO_PIN_RESET
-#define DIGIT_ON GPIO_PIN_SET
+#define SEG_ON    GPIO_PIN_SET
+#define SEG_OFF   GPIO_PIN_RESET
+#define DIGIT_ON  GPIO_PIN_SET
 #define DIGIT_OFF GPIO_PIN_RESET
 
 static volatile uint16_t display_value = 0U;
@@ -26,19 +26,19 @@ static const uint8_t digit_segments[10] =
 
 static void SevenSeg_AllDigitsOff(void)
 {
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,  DIGIT_OFF);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, DIGIT_OFF);
-    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, DIGIT_OFF);
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3,  DIGIT_OFF);
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,  DIGIT_OFF); /* SEG1 */
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, DIGIT_OFF); /* SEG2 */
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, DIGIT_OFF); /* SEG3 */
+    HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, DIGIT_OFF); /* SEG4 */
 }
 
 static void SevenSeg_WriteSegments(uint8_t pattern)
 {
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, (pattern & 0x01U) ? SEG_ON : SEG_OFF); /* A */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, (pattern & 0x02U) ? SEG_ON : SEG_OFF); /* B */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_7,  (pattern & 0x04U) ? SEG_ON : SEG_OFF); /* C */
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_10, (pattern & 0x01U) ? SEG_ON : SEG_OFF); /* A */
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_2,  (pattern & 0x02U) ? SEG_ON : SEG_OFF); /* B */
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5,  (pattern & 0x04U) ? SEG_ON : SEG_OFF); /* C */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_12, (pattern & 0x08U) ? SEG_ON : SEG_OFF); /* D */
-    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_13, (pattern & 0x10U) ? SEG_ON : SEG_OFF); /* E */
+    HAL_GPIO_WritePin(GPIOB, GPIO_PIN_11, (pattern & 0x10U) ? SEG_ON : SEG_OFF); /* E */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_1,  (pattern & 0x20U) ? SEG_ON : SEG_OFF); /* F */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_0,  (pattern & 0x40U) ? SEG_ON : SEG_OFF); /* G */
     HAL_GPIO_WritePin(GPIOB, GPIO_PIN_14, SEG_OFF);                               /* DP */
@@ -51,7 +51,7 @@ static void SevenSeg_EnableDigit(uint8_t digit)
         case 0U: HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8,  DIGIT_ON); break;  /* SEG1 */
         case 1U: HAL_GPIO_WritePin(GPIOA, GPIO_PIN_11, DIGIT_ON); break;  /* SEG2 */
         case 2U: HAL_GPIO_WritePin(GPIOA, GPIO_PIN_12, DIGIT_ON); break;  /* SEG3 */
-        case 3U: HAL_GPIO_WritePin(GPIOB, GPIO_PIN_3,  DIGIT_ON); break;  /* SEG4 */
+        case 3U: HAL_GPIO_WritePin(GPIOA, GPIO_PIN_15, DIGIT_ON); break;  /* SEG4 */
         default: break;
     }
 }
